@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Vanilla Chuck</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Chuck Norris Jokes</h1>
+
+        <form action="#" id="jokes_names_form">
+            <div class="form-group">
+                <input name="customName" id="customName" placeholder="Custom name" class="form-control" />
+                <input name="customSurname" id="customSurname" placeholder="Custom surname" class="form-control" />
+                <button id="btnSearch">Search</button>
+            </div>
+        </form>
+
+        <ul id="results" class="list-group">
+            
+        </ul>
+    </div>
+
+    <script src="./js/vanillaChuck.js"></script>
+    <script>
+        function apiCallback(myObj) {
+            var tmpLi = myObj.value.joke;
+            var newLI = document.createElement('li');
+            newLI.appendChild(document.createTextNode(tmpLi));
+            newLI.className = "list-group-item";
+            resultsUl.appendChild(newLI);
+        }
+
+        var customName = document.getElementById("customName");
+        var customSurname = document.getElementById("customSurname");
+        var form_el = document.getElementById("jokes_names_form");
+        var btn = document.getElementById("btnSearch");
+        var resultsUl = document.getElementById("results");
+
+        form_el.addEventListener("submit", function (evt) {
+            evt.preventDefault();
+            resultsUl.innerHTML = "";
+            IcndbAPI.getRandomJoke("apiCallback", customName.value, customSurname.value);
+        });
+
+        customName.addEventListener('input', function (evt) {
+            
+        });
+        customSurname.addEventListener('input', function (evt) {
+            
+        });
+    </script>
+
+</body>
+
+</html>
