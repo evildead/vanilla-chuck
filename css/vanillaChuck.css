@@ -1,0 +1,191 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.App-logo {
+    animation: App-logo-spin infinite 20s linear;
+    height: 50px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.App-header {
+    background-color: #222;
+    height: 85px;
+    color: white;
+    padding-left: 20px;
+}
+
+.navbar-brand-title {
+    font-size: 24px;
+}
+
+div.container.mainContainer {
+    margin-top: 90px;
+}
+
+.jumbotron.jumbotron-customized {
+    padding-top: 1px !important;
+    padding-bottom: 10px !important;
+}
+
+div.container.resultsdiv {
+    background-color: #FAFAD2;
+    border-radius: 6px;
+}
+
+li.list-group-item {
+    padding-left: 35px;
+    padding-right: 35px;
+}
+
+button.roundhouseKickBtn {
+    margin-top: 30px !important;
+}
+
+div.jokesSelect {
+    padding-right: 0px;
+}
+
+label.jokesLabel {
+    text-align: right;
+}
+
+/* footer */
+#site-footer  {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    text-align: center;
+    font-size: 16px;
+    background: #222;
+    color: #999;
+}
+
+
+/* HOVER.css */
+/* Pulse */
+@-webkit-keyframes hvr-pulse {
+    25% {
+        -webkit-transform: scale(1.1) rotate(4deg);
+        transform: scale(1.1) rotate(4deg);
+    }
+    75% {
+        -webkit-transform: scale(0.9) rotate(-4deg);
+        transform: scale(0.9) rotate(-4deg);
+    }
+}
+@keyframes hvr-pulse {
+    25% {
+        -webkit-transform: scale(1.1) rotate(4deg);
+        transform: scale(1.1) rotate(4deg);
+    }
+    75% {
+        -webkit-transform: scale(0.9) rotate(-4deg);
+        transform: scale(0.9) rotate(-4deg);
+    }
+}
+.hvr-pulse {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+}
+.hvr-pulse:hover {
+    -webkit-animation-name: hvr-pulse;
+    animation-name: hvr-pulse;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    animation-timing-function: linear;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+}
+
+/* Grow Rotate */
+.hvr-grow-rotate {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+}
+.hvr-grow-rotate:hover, .hvr-grow-rotate:focus, .hvr-grow-rotate:active {
+    -webkit-transform: scale(1.1) rotate(4deg);
+    transform: scale(1.1) rotate(4deg);
+}
+
+/* Grow Shadow */
+.hvr-grow-shadow {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: box-shadow, transform;
+    transition-property: box-shadow, transform;
+}
+.hvr-grow-shadow:hover, .hvr-grow-shadow:focus, .hvr-grow-shadow:active {
+    box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+    -webkit-transform: scale(1.07);
+    transform: scale(1.07);
+}
+
+/* Skew Forward */
+.hvr-skew-forward {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+}
+.hvr-skew-forward:hover {
+    -webkit-transform: skew(-20deg);
+    transform: skew(-20deg);
+}
+
+/* Bounce In */
+.hvr-bounce-in {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    -webkit-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+}
+.hvr-bounce-in:hover, .hvr-bounce-in:focus, .hvr-bounce-in:active {
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+    -webkit-transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+    transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+}

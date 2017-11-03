@@ -3,56 +3,130 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="./favicon.ico">
     <title>Vanilla Chuck</title>
+    
     <!-- Bootstrap -->
     <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+
+    <!-- Custom css -->
+    <link rel="stylesheet" href="./css/vanillaChuck.css">
 </head>
 
-<body>
-    <div class="container">
-        <h1>Chuck Norris Jokes</h1>
-
-        <form action="#" id="jokes_names_form">
-            <div class="form-group">
-                <input name="customName" id="customName" placeholder="Custom name" class="form-control" />
-                <input name="customSurname" id="customSurname" placeholder="Custom surname" class="form-control" />
-                <button id="btnSearch">Search</button>
+<body onload="onloadFunction()">
+    <!-- header -->
+    <header id="site-header">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header App-header">
+                    <img alt="Vanilla-Chuck" class="img-circle App-logo" src="./images/ChuckNorris-256x256x32.png">
+                    <p class="navbar-brand-title">Chuck Norris Jokes</p>
+                </div>
             </div>
-        </form>
+        </nav>
+    </header>
 
-        <ul id="results" class="list-group">
-            
-        </ul>
+    <!-- Main -->
+    <div class="container mainContainer">
+        <div class="jumbotron jumbotron-customized">
+            <!--<h2>Show me some Jokes</h2>-->
+            <h2><img alt="Vanilla Chuck" class="img-circle hvr-bounce-in" width="80px" src="./images/ChuckNorris-256x256x32.png"><span>Show me some Jokes</span></h2>
+            <form action="#" id="jokes_names_form">
+                <div class="form-group">
+                    <input name="customName" id="customName" placeholder="Name (default Chuck)" class="form-control" />
+                    <input name="customSurname" id="customSurname" placeholder="Surname (default Norris)" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="jokesNumSel" class="col-sm-3 col-xs-6 control-label jokesLabel">Number of Jokes</label>
+                    <div class="col-sm-9 col-xs-6 jokesSelect">
+                        <select id="jokesNumSel" name="jokesNumSel" class="form-control"></select>
+                    </div>
+                </div>
+                <button id="btnSearch" class="btn btn-primary hvr-pulse roundhouseKickBtn"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Roundhouse-Kick It!!!</button>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12 resultsdiv">
+                <ul id="results" class="list-group"></ul>
+            </div>
+        </div>
     </div>
+
+    <!-- footer -->
+    <footer id="site-footer">
+        <a href="http://www.icndb.com/api/" target="_blank">API offered by icndb.com</a>
+    </footer>
 
     <script src="./js/vanillaChuck.js"></script>
     <script>
-        function apiCallback(myObj) {
-            var tmpLi = myObj.value.joke;
-            var newLI = document.createElement('li');
-            newLI.appendChild(document.createTextNode(tmpLi));
+        function createAndInsertJoke(joke, resultsUl) {
+            let newSpan = document.createElement('span');
+            newSpan.appendChild(document.createTextNode(joke));
+            newSpan.className = "hvr-grow-shadow";
+            let newLI = document.createElement('li');
+            newLI.appendChild(newSpan);
             newLI.className = "list-group-item";
             resultsUl.appendChild(newLI);
         }
 
-        var customName = document.getElementById("customName");
-        var customSurname = document.getElementById("customSurname");
-        var form_el = document.getElementById("jokes_names_form");
-        var btn = document.getElementById("btnSearch");
-        var resultsUl = document.getElementById("results");
+        function onloadFunction() {
+            var customName = document.getElementById("customName");
+            var customSurname = document.getElementById("customSurname");
+            var form_el = document.getElementById("jokes_names_form");
+            var btn = document.getElementById("btnSearch");
+            var resultsUl = document.getElementById("results");
+            var jokesNumSel = document.getElementById("jokesNumSel");
 
-        form_el.addEventListener("submit", function (evt) {
-            evt.preventDefault();
-            resultsUl.innerHTML = "";
-            IcndbAPI.getRandomJoke("apiCallback", customName.value, customSurname.value);
-        });
+            function apiCallback(myObj) {
+                if(Array.isArray(myObj.value)) {
+                    for(myjoke of myObj.value) {
+                        createAndInsertJoke(myjoke.joke, resultsUl);
+                    }
+                }
+                else {
+                    createAndInsertJoke(myObj.value.joke, resultsUl);
+                }
+            }
 
-        customName.addEventListener('input', function (evt) {
-            
-        });
-        customSurname.addEventListener('input', function (evt) {
-            
-        });
+            // add options to select
+            for(let i = 1; i <= 100; i++) {
+                var newOption = document.createElement('option');
+                newOption.value = i;
+                newOption.appendChild(document.createTextNode(i));
+                jokesNumSel.appendChild(newOption);
+            }
+            jokesNumSel.selectedIndex = 4;
+
+            form_el.addEventListener("submit", function (evt) {
+                evt.preventDefault();
+                resultsUl.innerHTML = "";
+
+                // A way to use IcndbAPI class: pass the name of a predefined callback
+                //IcndbAPI.getRandomJoke("apiCallback", customName.value, customSurname.value);
+
+                // Another way to use IcndbAPI class: use promises
+                IcndbAPI.getRandomJokePromise(customName.value, customSurname.value, jokesNumSel.value)
+                    .then((myObj) => {
+                        if(Array.isArray(myObj.value)) {
+                            for(myjoke of myObj.value) {
+                                createAndInsertJoke(myjoke.joke, resultsUl);
+                            }
+                        }
+                        else {
+                            createAndInsertJoke(myObj.value.joke, resultsUl);
+                        }
+                    })
+            });
+
+            customName.addEventListener('input', function (evt) {
+                
+            });
+            customSurname.addEventListener('input', function (evt) {
+                
+            });
+        }
     </script>
 
 </body>
