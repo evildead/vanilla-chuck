@@ -2,7 +2,7 @@
 
 class IcndbAPI {
     static baseApiAddress() {
-        return "http://api.icndb.com";
+        return "https://api.icndb.com";
     }
 
     static getRandomJoke(callbackName, customName, customSurname) {
