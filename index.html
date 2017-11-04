@@ -31,7 +31,7 @@
     <div class="container mainContainer">
         <div class="jumbotron jumbotron-customized">
             <!--<h2>Show me some Jokes</h2>-->
-            <h2><img alt="Vanilla Chuck" class="img-circle hvr-bounce-in" width="80px" src="./images/ChuckNorris-256x256x32.png"><span>Show me some Jokes</span></h2>
+            <h3><img alt="Vanilla Chuck" class="img-circle hvr-bounce-in" width="80px" src="./images/ChuckNorris-256x256x32.png"><span>Crack a Joke</span></h3>
             <form action="#" id="jokes_names_form">
                 <div class="form-group">
                     <input name="customName" id="customName" placeholder="Name (default Chuck)" class="form-control" />
@@ -61,6 +61,13 @@
 
     <script src="./js/vanillaChuck.js"></script>
     <script>
+        var customName = document.getElementById("customName");
+        var customSurname = document.getElementById("customSurname");
+        var form_el = document.getElementById("jokes_names_form");
+        var btn = document.getElementById("btnSearch");
+        var resultsUl = document.getElementById("results");
+        var jokesNumSel = document.getElementById("jokesNumSel");
+
         function createAndInsertJoke(joke, resultsUl) {
             let newSpan = document.createElement('span');
             newSpan.appendChild(document.createTextNode(joke));
@@ -71,25 +78,22 @@
             resultsUl.appendChild(newLI);
         }
 
-        function onloadFunction() {
-            var customName = document.getElementById("customName");
-            var customSurname = document.getElementById("customSurname");
-            var form_el = document.getElementById("jokes_names_form");
-            var btn = document.getElementById("btnSearch");
-            var resultsUl = document.getElementById("results");
-            var jokesNumSel = document.getElementById("jokesNumSel");
-
-            function apiCallback(myObj) {
-                if(Array.isArray(myObj.value)) {
-                    for(myjoke of myObj.value) {
-                        createAndInsertJoke(myjoke.joke, resultsUl);
-                    }
-                }
-                else {
-                    createAndInsertJoke(myObj.value.joke, resultsUl);
-                }
+        function apiCallback(myObj) {
+            if(!myObj) {
+                console.log("apiCallback: Nothing returned by the server!!!");
             }
 
+            if(Array.isArray(myObj.value)) {
+                for(myjoke of myObj.value) {
+                    createAndInsertJoke(myjoke.joke, resultsUl);
+                }
+            }
+            else {
+                createAndInsertJoke(myObj.value.joke, resultsUl);
+            }
+        }
+
+        function onloadFunction() {
             // add options to select
             for(let i = 1; i <= 100; i++) {
                 var newOption = document.createElement('option');
@@ -104,7 +108,7 @@
                 resultsUl.innerHTML = "";
 
                 // A way to use IcndbAPI class: pass the name of a predefined callback
-                //IcndbAPI.getRandomJoke("apiCallback", customName.value, customSurname.value);
+                //IcndbAPI.getRandomJoke("apiCallback", customName.value, customSurname.value, jokesNumSel.value);
 
                 // Another way to use IcndbAPI class: use promises
                 IcndbAPI.getRandomJokePromise(customName.value, customSurname.value, jokesNumSel.value)
@@ -118,6 +122,9 @@
                             createAndInsertJoke(myObj.value.joke, resultsUl);
                         }
                     })
+                    .catch((reason) => {
+                        console.log('Promises catch: ' + reason);
+                    });
             });
 
             customName.addEventListener('input', function (evt) {
