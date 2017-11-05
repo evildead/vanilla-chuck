@@ -20,7 +20,7 @@
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header App-header">
-                    <img alt="Vanilla-Chuck" class="img-circle App-logo" src="./images/ChuckNorris-256x256x32.png">
+                    <img alt="Vanilla-Chuck" class="img-circle App-logo" src="./images/cn.png">
                     <p class="navbar-brand-title">Chuck Norris Jokes</p>
                 </div>
             </div>
@@ -31,7 +31,7 @@
     <div class="container mainContainer">
         <div class="jumbotron jumbotron-customized">
             <!--<h2>Show me some Jokes</h2>-->
-            <h3><img alt="Vanilla Chuck" class="img-circle hvr-bounce-in" width="80px" src="./images/ChuckNorris-256x256x32.png"><span>Crack a Joke</span></h3>
+            <h3><img alt="Vanilla Chuck" class="img-circle hvr-bounce-in" width="80px" src="./images/cn.png"><span>Crack a Joke</span></h3>
             <form action="#" id="jokes_names_form">
                 <div class="form-group">
                     <input name="customName" id="customName" placeholder="Name (default Chuck)" class="form-control" />
@@ -59,6 +59,7 @@
         <a href="http://www.icndb.com/api/" target="_blank">API offered by icndb.com</a>
     </footer>
 
+    <script src="./js/danJsonp.js"></script>
     <script src="./js/vanillaChuck.js"></script>
     <script>
         var customName = document.getElementById("customName");
