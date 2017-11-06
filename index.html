@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="./css/vanillaChuck.css">
 </head>
 
-<body onload="onloadFunction()">
+<body>
     <!-- header -->
     <header id="site-header">
         <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -59,42 +59,65 @@
         <a href="http://www.icndb.com/api/" target="_blank">API offered by icndb.com</a>
     </footer>
 
-    <script src="./js/danJsonp.js"></script>
-    <script src="./js/vanillaChuck.js"></script>
     <script>
-        var customName = document.getElementById("customName");
-        var customSurname = document.getElementById("customSurname");
-        var form_el = document.getElementById("jokes_names_form");
-        var btn = document.getElementById("btnSearch");
-        var resultsUl = document.getElementById("results");
-        var jokesNumSel = document.getElementById("jokesNumSel");
-
-        function createAndInsertJoke(joke, resultsUl) {
-            let newSpan = document.createElement('span');
-            newSpan.appendChild(document.createTextNode(joke));
-            newSpan.className = "hvr-grow-shadow";
-            let newLI = document.createElement('li');
-            newLI.appendChild(newSpan);
-            newLI.className = "list-group-item";
-            resultsUl.appendChild(newLI);
-        }
+        var supportsES6 = function() {
+            try {
+                let b;                          // support let
+                new Function("(a = 0) => a");   // a = 0: support default parameters, (a = 0) => a: support arrow functions
+                return true;
+            }
+            catch (err) {
+                return false;
+            }
+        }();
+        
+        var createAndInsertJoke = null;
 
         function apiCallback(myObj) {
             if(!myObj) {
                 console.log("apiCallback: Nothing returned by the server!!!");
             }
-
             if(Array.isArray(myObj.value)) {
-                for(myjoke of myObj.value) {
-                    createAndInsertJoke(myjoke.joke, resultsUl);
+                for(var i = 0; i < myObj.value.length; i++) {
+                    createAndInsertJoke(myObj.value[i].joke);
                 }
             }
             else {
-                createAndInsertJoke(myObj.value.joke, resultsUl);
+                createAndInsertJoke(myObj.value.joke);
             }
         }
 
-        function onloadFunction() {
+        (function() {   // the DOM will be available here
+            // ES6 support
+            if(supportsES6) {
+                // insert DanJsonp class
+                var script01 = document.createElement("script");
+                script01.src = "./js/danJsonp.js";
+                document.head.appendChild(script01);
+                
+                // insert icndb class
+                var script02 = document.createElement("script");
+                script02.src = "./js/vanillaChuck.js";
+                document.head.appendChild(script02);
+            }
+            
+            var customName = document.getElementById("customName");
+            var customSurname = document.getElementById("customSurname");
+            var form_el = document.getElementById("jokes_names_form");
+            var btn = document.getElementById("btnSearch");
+            var resultsUl = document.getElementById("results");
+            var jokesNumSel = document.getElementById("jokesNumSel");
+            
+            createAndInsertJoke = function(joke) {
+                var newSpan = document.createElement('span');
+                newSpan.appendChild(document.createTextNode(joke));
+                newSpan.className = "hvr-grow-shadow";
+                var newLI = document.createElement('li');
+                newLI.appendChild(newSpan);
+                newLI.className = "list-group-item";
+                resultsUl.appendChild(newLI);
+            }
+            
             // add options to select
             for(let i = 1; i <= 100; i++) {
                 var newOption = document.createElement('option');
@@ -108,24 +131,49 @@
                 evt.preventDefault();
                 resultsUl.innerHTML = "";
 
-                // A way to use IcndbAPI class: pass the name of a predefined callback
-                //IcndbAPI.getRandomJoke("apiCallback", customName.value, customSurname.value, jokesNumSel.value);
+                // ES6 support
+                if(supportsES6) {
+                    // A way to use IcndbAPI class: pass the name of a predefined callback
+                    //IcndbAPI.getRandomJoke("apiCallback", customName.value, customSurname.value, jokesNumSel.value);
 
-                // Another way to use IcndbAPI class: use promises
-                IcndbAPI.getRandomJokePromise(customName.value, customSurname.value, jokesNumSel.value)
-                    .then((myObj) => {
-                        if(Array.isArray(myObj.value)) {
-                            for(myjoke of myObj.value) {
-                                createAndInsertJoke(myjoke.joke, resultsUl);
+                    // Another way to use IcndbAPI class: use promises
+                    IcndbAPI.getRandomJokePromise(customName.value, customSurname.value, jokesNumSel.value)
+                        .then( function(myObj) {
+                            if(Array.isArray(myObj.value)) {
+                                for(var i = 0; i < myObj.value.length; i++) {
+                                    createAndInsertJoke(myObj.value[i].joke);
+                                }
                             }
-                        }
-                        else {
-                            createAndInsertJoke(myObj.value.joke, resultsUl);
-                        }
-                    })
-                    .catch((reason) => {
-                        console.log('Promises catch: ' + reason);
-                    });
+                            else {
+                                createAndInsertJoke(myObj.value.joke);
+                            }
+                        })
+                        .catch( function(reason) {
+                            console.log('Promises catch: ' + reason);
+                        });
+                }
+                // fallback -> let's craft the request by ourselves
+                else {
+                    // build custom main character
+                    var nameOfMainCharacter = "";
+                    if(customName.value.length > 0) {
+                        nameOfMainCharacter += ("&firstName=" + customName.value);
+                    }
+                    if(customSurname.value.length > 0) {
+                        nameOfMainCharacter += ("&lastName=" + customSurname.value);
+                    }
+
+                    // Build uri
+                    var myUri = "https://api.icndb.com/jokes/random/"+jokesNumSel.value+"/?callback=apiCallback&escape=javascript";
+                    if(nameOfMainCharacter.length > 0) {
+                        myUri += nameOfMainCharacter;
+                    }
+                    
+                    var s = document.createElement("script");
+                    s.src = myUri;
+                    // append script node to document body
+                    document.body.appendChild(s);
+                }
             });
 
             customName.addEventListener('input', function (evt) {
@@ -134,7 +182,7 @@
             customSurname.addEventListener('input', function (evt) {
                 
             });
-        }
+        })();
     </script>
 
 </body>
