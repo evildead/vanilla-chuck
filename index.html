@@ -90,17 +90,6 @@
             };
         }
 
-        function testSupportES6() {
-            try {
-                let b;                          // support let
-                new Function("(a = 0) => a");   // a = 0: support default parameters, (a = 0) => a: support arrow functions
-                return true;
-            }
-            catch (err) {
-                return false;
-            }
-        }
-        
         var createAndInsertJoke = null;
 
         function apiCallback(myObj) {
@@ -124,9 +113,19 @@
             // Very old chrome
             if((browser.name.toUpperCase() === "CHROME") && (parseInt(browser.version) < 49)) {
                 supportsES6 = false;
+                console.log("Old Chrome (Maybe an old Android device)");
             }
             else {
-                supportsES6 = testSupportES6();
+                supportsES6 = function() {
+                    try {
+                        let b;                          // support let
+                        new Function("(a = 0) => a");   // a = 0: support default parameters, (a = 0) => a: support arrow functions
+                        return true;
+                    }
+                    catch (err) {
+                        return false;
+                    }
+                }();
             }
 
             // ES6 support
