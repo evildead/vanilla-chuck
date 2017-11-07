@@ -107,19 +107,16 @@
         }
 
         (function() {   // the DOM will be available here
-            var supportsES6;
+            var supportsES6 = true;
             var browser = get_browser(); // get browser name and version
 
             // Very old chrome
             if((browser.name.toUpperCase() === "CHROME") && (parseInt(browser.version) < 49)) {
                 supportsES6 = false;
-                console.log("Old Chrome (Maybe an old Android device)");
             }
             else {
-                /*
                 supportsES6 = function() {
                     try {
-                        let b;                          // support let
                         new Function("(a = 0) => a");   // a = 0: support default parameters, (a = 0) => a: support arrow functions
                         return true;
                     }
@@ -127,9 +124,6 @@
                         return false;
                     }
                 }();
-                */
-
-                supportsES6 = false;
             }
 
             // ES6 support
@@ -181,6 +175,7 @@
                     //IcndbAPI.getRandomJoke("apiCallback", customName.value, customSurname.value, jokesNumSel.value);
 
                     // Another way to use IcndbAPI class: use promises
+                    console.log("We're here");
                     IcndbAPI.getRandomJokePromise(customName.value, customSurname.value, jokesNumSel.value)
                         .then( function(myObj) {
                             if(Array.isArray(myObj.value)) {
