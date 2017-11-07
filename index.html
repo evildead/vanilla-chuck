@@ -116,6 +116,7 @@
                 console.log("Old Chrome (Maybe an old Android device)");
             }
             else {
+                /*
                 supportsES6 = function() {
                     try {
                         let b;                          // support let
@@ -126,6 +127,9 @@
                         return false;
                     }
                 }();
+                */
+
+                supportsES6 = false;
             }
 
             // ES6 support
