@@ -175,7 +175,6 @@
                     //IcndbAPI.getRandomJoke("apiCallback", customName.value, customSurname.value, jokesNumSel.value);
 
                     // Another way to use IcndbAPI class: use promises
-                    console.log("We're here");
                     IcndbAPI.getRandomJokePromise(customName.value, customSurname.value, jokesNumSel.value)
                         .then( function(myObj) {
                             if(Array.isArray(myObj.value)) {
